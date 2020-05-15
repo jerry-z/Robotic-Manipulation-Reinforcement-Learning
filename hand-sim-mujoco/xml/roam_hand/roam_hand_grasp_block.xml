@@ -1,0 +1,8 @@
+<mujoco>
+	<!-- always include shared.xml first -->
+	<include file="shared.xml"></include>
+	<include file="robot0_roam_hand.xml"></include>
+	<!-- To add more objects, just inlude the file here -->
+	<include file="object0_cube.xml"></include>
+	<include file="obstacle0_table.xml"></include>
+</mujoco>

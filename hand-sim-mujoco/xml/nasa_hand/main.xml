@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco>
+	<compiler angle="radian" coordinate="local" eulerseq="xyz" inertiafromgeom="true"></compiler>
+	<actuator>
+		<position ctrllimited="true" ctrlrange="-1.2 1.2" joint="palm_slide_X" kp="200" name="palm_slide_X_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.2 1.2" joint="palm_slide_Y" kp="200" name="palm_slide_Y_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.2 1.2" joint="palm_slide_Z" kp="200" name="palm_slide_Z_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-3.14 3.14" joint="palm_eular_Z" kp="200" gear="1 0 0 0 0 0" name="palm_eular_Z_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-3.14 3.14" joint="palm_eular_Y" kp="200" gear="1 0 0 0 0 0" name="palm_eular_Y_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-3.14 3.14" joint="palm_eular_X" kp="200" gear="1 0 0 0 0 0" name="palm_eular_X_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.6056 1.6056" joint="finger1_roll_joint" kp="200" name="finger1_roll_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.6056 1.6056" joint="finger1_prox_joint" kp="200" name="finger1_prox_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.6056 1.6056" joint="finger1_dist_joint" kp="200" name="finger1_dist_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.6056 1.6056" joint="finger2_roll_joint" kp="200" name="finger2_roll_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.6056 1.6056" joint="finger2_prox_joint" kp="200" name="finger2_prox_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.6056 1.6056" joint="finger2_dist_joint" kp="200" name="finger2_dist_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.6056 1.6056" joint="thumb_prox_joint" kp="200" name="thumb_prox_actuator"></position>
+		<position ctrllimited="true" ctrlrange="-1.6056 1.6056" joint="thumb_dist_joint" kp="200" name="thumb_dist_actuator"></position>
+	</actuator>
+	<contact>
+		<exclude body1="base_link_palm" body2="finger1_roll_link"></exclude>
+		<exclude body1="base_link_palm" body2="finger1_prox_link"></exclude>
+		<exclude body1="base_link_palm" body2="finger2_roll_link"></exclude>
+		<exclude body1="base_link_palm" body2="finger2_prox_link"></exclude>
+		<exclude body1="base_link_palm" body2="thumb_prox_link"></exclude>
+	</contact>
+
+	<asset>
+		<mesh file="base_link_palm.STL" name="base_link_palm"></mesh>
+		<mesh file="finger1_roll_link.STL" name="finger1_roll_link"></mesh>
+		<mesh file="finger1_prox_link.STL" name="finger1_prox_link"></mesh>
+		<mesh file="finger1_dist_link.STL" name="finger1_dist_link"></mesh>
+		<mesh file="finger2_roll_link.STL" name="finger2_roll_link"></mesh>
+		<mesh file="finger2_prox_link.STL" name="finger2_prox_link"></mesh>
+		<mesh file="finger2_dist_link.STL" name="finger2_dist_link"></mesh>
+		<mesh file="thumb_prox_link.STL" name="thumb_prox_link"></mesh>
+		<mesh file="thumb_dist_link.STL" name="thumb_dist_link"></mesh>
+		<material name="palm_mat" shininess="0.03" specular="0.75" texture="palm_tex"></material>
+		<texture builtin="flat" name="palm_tex" height="32" width="32" rgb1="0.5 0.5 0.5" type="cube"></texture>
+		<material name="finger_mat" shininess="0.03" specular="0.75" texture="finger_tex"></material>
+		<texture builtin="flat" name="finger_tex" height="32" width="32" rgb1="1 1 1" type="cube"></texture>
+		<texture builtin="checker" height="100" name="texplane" rgb1="0 0 0" rgb2="0.8 0.8 0.8" type="2d" width="100"/>
+        <material name="MatPlane" reflectance="0.5" shininess="1" specular="1" texrepeat="60 60" texture="texplane"/>
+	</asset>
+	<default>
+		<default class="hand">
+			<geom margin="0.001" material="geomMat" rgba="1 1 1 1" solimp="0.99 0.99 0.01" solref="0.01 1" type="mesh" user="0" condim="3"></geom>
+			<joint armature="1" damping="50" frictionloss="0" stiffness="0"></joint>
+		</default>
+	</default>
+	<worldbody>
+		<geom friction="1 0 0" name="floor0" pos="0 0 0" size="0.1 0.1 1" type="plane" condim="4" material="MatPlane"></geom>
+		<body childclass="hand" name="base_link_palm">
+			<joint armature="0.0001" axis="1 0 0" name="palm_slide_X" type="slide"></joint>
+			<joint armature="0.0001" axis="0 1 0" name="palm_slide_Y" type="slide"></joint>
+			<joint armature="0.0001" axis="0 0 1" name="palm_slide_Z" type="slide"></joint>
+			<joint armature="0.0001" axis="0 0 1" name="palm_eular_Z" ></joint>
+			<joint armature="0.0001" axis="0 1 0" name="palm_eular_Y" ></joint>
+			<joint armature="0.0001" axis="1 0 0" name="palm_eular_X" ></joint>
+	       	<geom name="base_link_palm" mesh="base_link_palm" material="palm_mat"></geom>
+			<inertial pos="-0.000594663924510084 0.00565139832149968 0.0297400821415816" euler="0 0 0" mass="0.29096633076177"></inertial>
+			<body name="finger1_roll_link" pos="-0.028 0.035 0.068" euler="1.5707963267949 0 0">
+				<joint axis="0 1 0" name="finger1_roll_joint" range="-1.6056 1.6056"></joint>
+				<geom name="finger1_roll_link" mesh="finger1_roll_link" material="finger_mat"></geom>
+				<inertial pos="0.000146870902588424 -0.0137271524263743 -0.00600229318938614" mass="0.0177933948162954"></inertial>
+				<body name="finger1_prox_link" pos="0 0 0" euler="-0.785398163397461 0 0">
+					<joint axis="1 0 0" name="finger1_prox_joint" range="-1.6056 1.6056"></joint>
+					<geom name="finger1_prox_link" mesh="finger1_prox_link" material="finger_mat"></geom>
+					<inertial pos="1.40526919325361E-05 0.0184534911586577 -0.00111512834466113" mass="0.0147286536806046"></inertial>
+					<body name="finger1_dist_link" pos="0 0.05 0" euler="0 0 0">
+						<joint axis="1 0 0" name="finger1_dist_joint" range="-1.6056 1.6056"></joint>
+						<geom name="finger1_dist_link" mesh="finger1_dist_link" material="finger_mat"></geom>
+						<inertial pos="-0.000224642282047483 0.0180814521556978 -0.00116670569144653" mass="0.0134719926941951"></inertial>
+					</body>
+				</body>
+			</body>
+			<body name="finger2_roll_link" pos="0.028 0.035 0.0679999999999999" euler="1.5707963267949 3.14159265 0">
+				<joint axis="0 1 0" name="finger2_roll_joint" range="-1.6056 1.6056"></joint>
+				<geom name="finger2_roll_link" mesh="finger2_roll_link" material="finger_mat"></geom>
+				<inertial pos="0.000153041039668924 -0.013727218949099 0.00599956137074181" mass="0.0177936686842279"></inertial>
+				<body name="finger2_prox_link" pos="0 0 0" euler="0.785398163397454 3.33066907387547E-16 -3.05311331771918E-16">
+					<joint axis="1 0 0" name="finger2_prox_joint" range="-1.6056 1.6056"></joint>
+					<geom name="finger2_prox_link" mesh="finger2_prox_link" material="finger_mat"></geom>
+					<inertial pos="1.40516702688276E-05 0.0184534734340179 0.00111506894753059" mass="0.0147287436161795"></inertial>
+					<body name="finger2_dist_link" pos="0 0.05 0" euler="1.11022302462516E-16 1.11022302462516E-16 3.88578058618805E-16">
+						<joint axis="1 0 0" name="finger2_dist_joint" range="-1.6056 1.6056"></joint>
+						<geom name="finger2_dist_link" mesh="finger2_dist_link" material="finger_mat"></geom>
+						<inertial pos="-0.000224631875924808 0.0180813044810053 0.00116678524841946" mass="0.0134722955456716"></inertial>
+					</body>
+				</body>
+			</body>
+			<body name="thumb_prox_link" pos="0 -0.035 0.066" euler="0.78539816339745 -2.83274922616151E-16 -3.14159265358979">
+				<joint axis="1 0 0" name="thumb_prox_joint" range="-1.6056 1.6056" ref="-1.57079632679"></joint>
+				<geom name="thumb_prox_link" mesh="thumb_prox_link" material="finger_mat"></geom>
+				<inertial pos="-0.000247180284718365 0.0197658069932369 -0.000935199895493472" mass="0.0128260475674034"></inertial>
+				<body name="thumb_dist_link" pos="0 0.05 0" euler="1.11022302462516E-16 1.11022302462516E-16 3.88578058618805E-16">
+					<joint axis="1 0 0" name="thumb_dist_joint" range="-1.6056 1.6056"></joint>
+					<geom name="thumb_dist_link" mesh="thumb_dist_link" material="finger_mat"></geom>
+					<inertial pos="-0.000224631875924808 0.0180813044810053 0.00116678524841946" mass="0.0134722955456716"></inertial>
+				</body>
+			</body>
+		</body>		
+
+	</worldbody>
+
+</mujoco>

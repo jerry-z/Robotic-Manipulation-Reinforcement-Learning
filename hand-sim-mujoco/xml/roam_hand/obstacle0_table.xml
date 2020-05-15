@@ -1,0 +1,12 @@
+<mujoco>
+    <asset>
+        <material name="MatPlane" reflectance="0.5" shininess="1" specular="1" texrepeat="60 60" texture="texplane"/>
+        <texture builtin="checker" height="100" name="texplane" rgb1="0 0 0" rgb2="0.8 0.8 0.8" type="2d" width="100"/>
+    </asset>
+
+    <worldbody>
+        <geom name="floor0" pos="0 0 0" size="1 1 1" type="plane" condim="4" material="MatPlane"></geom>
+        <body name="floor0" pos="0 0 0"></body>
+
+    </worldbody>
+</mujoco>

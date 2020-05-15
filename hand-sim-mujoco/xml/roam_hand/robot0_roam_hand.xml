@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco>
+    <contact>
+        <exclude body1="robot0:thumb_prox_link" body2="robot0:palm"></exclude>
+
+        <exclude body1="robot0:finger1_roll_link" body2="robot0:palm"></exclude>
+        <exclude body1="robot0:finger1_prox_link" body2="robot0:palm"></exclude>
+        <exclude body1="robot0:finger1_prox_link" body2="robot0:finger1_roll_link"></exclude>
+
+        <exclude body1="robot0:finger2_prox_link" body2="robot0:palm"></exclude>
+        <exclude body1="robot0:finger2_roll_link" body2="robot0:palm"></exclude>
+        <exclude body1="robot0:finger2_prox_link" body2="robot0:finger2_roll_link"></exclude>
+    </contact>
+
+    <asset>
+        <mesh file="palm.stl" name="palm_mesh"></mesh>
+        <mesh file="roll_link1.stl" name="finger1_roll_link_mesh"></mesh>
+        <mesh file="roll_link2.stl" name="finger2_roll_link_mesh"></mesh>
+        <mesh file="prox_link.stl" name="prox_link_mesh"></mesh>
+        <mesh file="dist_link.stl" name="dist_link_mesh"></mesh>
+        <material name="palm_mat" rgba="1 1 1 1" shininess="0.03" specular="0.75" texture="palm_tex"></material>
+        <texture builtin="flat" name="palm_tex" height="32" width="32" rgb1="0.5 0.5 0.5" type="cube"></texture>
+        <material name="finger_mat" shininess="0.03" specular="0.75" texture="finger_tex"></material>
+        <texture builtin="flat" name="finger_tex" height="32" width="32" rgb1="1 1 1" type="cube"></texture>
+    </asset>
+
+
+    <default>
+        <default class="hand">
+            <geom margin="0.001" material="finger_mat" type="mesh" condim="3"></geom>
+            <site size="0.005" rgba="0.4 0.9 0.4 1" pos="0 0 0"></site> 
+            <joint limited="true"> </joint>
+            <default class="finger">
+                <geom friction="1.2 0.01 0.0001" material="finger_mat" condim="4"></geom>              
+            </default>
+        </default>          
+    </default>
+
+
+
+    <worldbody>
+        <body childclass="hand" name="robot0:palm" pos="0 0 0.5" euler="0 3.14159 0">
+            <joint axis="1 0 0" name="robot0:palm_slide_x_joint" type="slide" range="-1.0 1.0" armature="20" frictionloss="10" damping="50"></joint>
+            <joint axis="0 1 0" name="robot0:palm_slide_y_joint" type="slide" range="-1.0 1.0" armature="20" frictionloss="10" damping="50"></joint>
+            <joint axis="0 0 1" name="robot0:palm_slide_z_joint" type="slide" range="0 0.4" armature="20" frictionloss="10" damping="50"></joint>
+            <!-- <joint axis="1 0 0" name="robot0:palm_eular_x_joint" type="hinge" range="-3.1416 3.1416" armature="5" frictionloss="0.5" damping="50"></joint> -->
+            <!-- <joint axis="0 1 0" name="robot0:palm_eular_y_joint" type="hinge" range="-3.1416 3.1416" armature="5" frictionloss="0.5" damping="50"></joint -->
+            <joint axis="0 0 1" name="robot0:palm_eular_z_joint" type="hinge" range="-3.1416 3.1416" armature="5" frictionloss="0.5" damping="50"></joint>
+
+            <geom name="robot0:palm" mesh="palm_mesh"></geom>
+            <inertial pos="0 0.0138 -0.1048" euler="-0.0045 0.0011 -1.5703" mass="2.65" diaginertia="0.0080 0.0086 0.0093"></inertial>
+
+
+            <body childclass="finger" name="robot0:thumb_prox_link" pos="0 0.045 0" euler="3.1416 1.5708 0" >
+                <joint name="robot0:thumb_prox_joint" axis="0 0 1" armature="0.005" frictionloss="0.05" damping="0.15" range="-1.0472 0.5236"></joint>
+                    <!-- stiffness="0.077" springref="-2.3562" -->
+                <geom name="robot0:thumb_prox_link" mesh="prox_link_mesh"></geom>
+                <inertial pos="0.0329 -0.0024 -0.0003" euler="-1.7207 0.1056 0.0114" mass="0.052" diaginertia="0.00000878 0.00002846 0.00002951"></inertial>
+
+                <body name="robot0:thumb_dist_link" pos="0.072 0 0" euler="0 0 0">
+                    <joint name="robot0:thumb_dist_joint" axis="0 0 1" armature="0.005" frictionloss="0.05" damping="0.15" range="0 1.5708" ></joint>
+                    <!-- stiffness="0.077" springref="-1.5708" -->
+                    <geom name="robot0:thumb_dist_link" mesh="dist_link_mesh"></geom>
+                    <inertial pos="0.0424 -0.0017 -0.0002" euler="-1.7865 0.0082 0.0039" mass="0.068" diaginertia="0.00001129 0.00005449 0.00005509"></inertial>
+                </body>
+            </body> 
+
+
+
+            <body childclass="finger" name="robot0:finger1_roll_link" pos="-0.0443 -0.0078 0" euler="0 0 0">
+                <joint name="robot0:finger1_roll_joint" axis="0 0 1" armature="0.005" frictionloss="0.05" damping="0.15" range="-1.5708 0.5236"></joint>
+                <geom name="robot0:finger1_roll_link" mesh="finger1_roll_link_mesh"></geom>
+                <inertial pos="0.0000 0.0006 -0.0206" euler="1.5361 -0.0001 1.5678" mass="0.017" diaginertia="0.00000319 0.00000399 0.00000535"></inertial>
+
+
+                <body childclass="finger" name="robot0:finger1_prox_link" pos="0 0 0" euler="0 -1.5708 0" >
+                    <joint name="robot0:finger1_prox_joint" axis="0 0 1" armature="0.005" frictionloss="0.05" damping="0.15" range="-1.0472 0.5236"></joint>
+                     <!-- stiffness="0.077" springref="-2.3562" -->
+                    <geom name="robot0:finger1_prox_link" mesh="prox_link_mesh"></geom>
+                    <inertial pos="0.0329 -0.0024 -0.0003" euler="-1.7207 0.1056 0.0114" mass="0.052" diaginertia="0.00000878 0.00002846 0.00002951"></inertial>
+
+                    <body name="robot0:finger1_dist_link" pos="0.072 0 0" euler="0 0 0">
+                        <joint name="robot0:finger1_dist_joint" axis="0 0 1" armature="0.005" frictionloss="0.05" damping="0.15" range="0 1.5708"></joint>
+                         <!-- stiffness="0.077" springref="-1.5708" -->
+                        <geom name="robot0:finger1_dist_link" mesh="dist_link_mesh"></geom>
+                        <inertial pos="0.0424 -0.0017 -0.0002" euler="-1.7865 0.0082 0.0039" mass="0.068" diaginertia="0.00001129 0.00005449 0.00005509"></inertial>
+                    </body>
+                </body> 
+            </body>
+
+
+            <body childclass="finger" name="robot0:finger2_roll_link" pos="0.0443 -0.0078 0" euler="0 3.1416 0">
+                <joint name="robot0:finger2_roll_joint" axis="0 0 1" armature="0.005" frictionloss="0.05" damping="0.15" range="-1.5708 0.5236"></joint>
+                <geom name="robot0:finger2_roll_link" mesh="finger2_roll_link_mesh"></geom>
+                <inertial pos="0.0000 0.0006 0.0206" euler="1.5361 -0.0001 -1.5678" mass="0.017" diaginertia="0.00000319 0.00000399 0.00000535"></inertial>
+
+
+                <body childclass="finger" name="robot0:finger2_prox_link" pos="0 0 0" euler="0 1.5708 0" >
+                    <joint name="robot0:finger2_prox_joint" axis="0 0 1" armature="0.005" frictionloss="0.05" damping="0.15" range="-1.0472 0.5236" ></joint>
+                    <!-- stiffness="0.077" springref="-2.3562" -->
+                    <geom name="robot0:finger2_prox_link" mesh="prox_link_mesh"></geom>
+                    <inertial pos="0.0329 -0.0024 -0.0003" euler="-1.7207 0.1056 0.0114" mass="0.052" diaginertia="0.00000878 0.00002846 0.00002951"></inertial>
+
+                    <body name="robot0:finger2_dist_link" pos="0.072 0 0" euler="0 0 0">
+                        <joint name="robot0:finger2_dist_joint" axis="0 0 1" armature="0.005" frictionloss="0.05" damping="0.15" range="0 1.5708" ></joint>
+                        <!-- stiffness="0.077" springref="-1.5708" -->
+                        <geom name="robot0:finger2_dist_link" mesh="dist_link_mesh"></geom>
+                        <inertial pos="0.0424 -0.0017 -0.0002" euler="-1.7865 0.0082 0.0039" mass="0.068" diaginertia="0.00001129 0.00005449 0.00005509"></inertial>
+                    </body>
+                </body> 
+            </body>
+        </body> 
+    <light directional="true" ambient="0.2 0.2 0.2" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3" castshadow="false" pos="0 1 4" dir="0 0 -1" name="light0"></light>
+    </worldbody>
+
+
+    <actuator>
+        <position ctrllimited="true" ctrlrange="-1.0 1.0" forcelimited="true" forcerange="-50 50" joint="robot0:palm_slide_x_joint" kp="100000" name="robot0:palm_slide_x_actuator"></position>
+        <position ctrllimited="true" ctrlrange="-1.0 1.0" forcelimited="true" forcerange="-50 50" joint="robot0:palm_slide_y_joint" kp="100000" name="robot0:palm_slide_y_actuator"></position>
+        <position ctrllimited="true" ctrlrange="0 0.4" forcelimited="true" forcerange="-50 50" joint="robot0:palm_slide_z_joint" kp="100000" name="robot0:palm_slide_z_actuator"></position>
+        <!--position ctrllimited="true" ctrlrange="-3.14 3.14" forcelimited="true" forcerange="-12 12" joint="robot0:palm_eular_x" kp="100000" name="robot0:palm_eular_x_actuator"></position>
+        <position ctrllimited="true" ctrlrange="-3.14 3.14" forcelimited="true" forcerange="-12 12" joint="robot0:palm_eular_y" kp="100000" name="robot0:palm_eular_y_actuator"></position-->
+        <position ctrllimited="true" ctrlrange="-3.1416 3.1416" forcelimited="true" forcerange="-12 12" joint="robot0:palm_eular_z_joint" kp="100000" name="robot0:palm_eular_z_actuator"></position>
+        <position ctrllimited="true" ctrlrange="-1.0472 0.5236" forcelimited="true" forcerange="-1.5 1.5" kp="100" joint="robot0:thumb_prox_joint" name="robot0:thumb_prox_actuator"></position>
+        <position ctrllimited="true" ctrlrange="0 1.5708" forcelimited="true" forcerange="-1.5 1.5" kp="100" joint="robot0:thumb_dist_joint" name="robot0:thumb_dist_actuator"></position>
+        <position ctrllimited="true" ctrlrange="-1.5708 0.5236" forcelimited="true" forcerange="-0.7 0.7" kp="100" joint="robot0:finger1_roll_joint" name="robot0:finger1_roll_actuator"></position>
+        <position ctrllimited="true" ctrlrange="-1.0472 0.5236" forcelimited="true" forcerange="-1.5 1.5" kp="100" joint="robot0:finger1_prox_joint" name="robot0:finger1_prox_actuator"></position>
+        <position ctrllimited="true" ctrlrange="0 1.5708" forcelimited="true" forcerange="-1.5 1.5" kp="100" joint="robot0:finger1_dist_joint" name="robot0:finger1_dist_actuator"></position>
+        <position ctrllimited="true" ctrlrange="-1.5708 0.5236" forcelimited="true" forcerange="-0.7 0.7" kp="100" joint="robot0:finger2_roll_joint" name="robot0:finger2_roll_actuator"></position>
+        <position ctrllimited="true" ctrlrange="-1.0472 0.5236" forcelimited="true" forcerange="-1.5 1.5" kp="100" joint="robot0:finger2_prox_joint" name="robot0:finger2_prox_actuator"></position>
+        <position ctrllimited="true" ctrlrange="0 1.5708" forcelimited="true" forcerange="-1.5 1.5" kp="100" joint="robot0:finger2_dist_joint" name="robot0:finger2_dist_actuator"></position>
+    </actuator>
+
+
+
+    <sensor>
+        <jointpos name="robot0:palm_slide_x_pos_sensor" joint="robot0:palm_slide_x_joint" cutoff="1.0"></jointpos>
+        <jointpos name="robot0:palm_slide_y_pos_sensor" joint="robot0:palm_slide_y_joint" cutoff="1.0"></jointpos>
+        <jointpos name="robot0:palm_slide_z_pos_sensor" joint="robot0:palm_slide_z_joint" cutoff="0.4"></jointpos>
+        <!-- <jointpos name="robot0:palm_eular_x_pos_sensor" joint="robot0:palm_eular_x_joint" cutoff="3.1416"></jointpos> -->
+        <!-- <jointpos name="robot0:palm_eular_y_pos_sensor" joint="robot0:palm_eular_y_joint" cutoff="3.1416"></jointpos> -->
+        <jointpos name="robot0:palm_eular_z_pos_sensor" joint="robot0:palm_eular_z_joint" cutoff="3.1416"></jointpos>
+        <jointpos name="robot0:thumb_prox_pos_sensor" joint="robot0:thumb_prox_joint" cutoff="1.0467"></jointpos>
+        <jointpos name="robot0:thumb_dist_pos_sensor" joint="robot0:thumb_dist_joint" cutoff="1.5708"></jointpos>
+        <jointpos name="robot0:finger1_roll_pos_sensor" joint="robot0:finger1_roll_joint" cutoff="1.5708"></jointpos>
+        <jointpos name="robot0:finger1_prox_pos_sensor" joint="robot0:finger1_prox_joint" cutoff="1.0467"></jointpos>
+        <jointpos name="robot0:finger1_dist_pos_sensor" joint="robot0:finger1_dist_joint" cutoff="1.5708"></jointpos>
+        <jointpos name="robot0:finger2_roll_pos_sensor" joint="robot0:finger2_roll_joint" cutoff="1.5708"></jointpos>
+        <jointpos name="robot0:finger2_prox_pos_sensor" joint="robot0:finger2_prox_joint" cutoff="1.0467"></jointpos>
+        <jointpos name="robot0:finger2_dist_pos_sensor" joint="robot0:finger2_dist_joint" cutoff="1.5708"></jointpos>
+
+        <actuatorfrc name="robot0:thumb_prox_trq_sensor" actuator="robot0:thumb_prox_actuator" cutoff="1.5"></actuatorfrc>
+        <actuatorfrc name="robot0:thumb_dist_trq_sensor" actuator="robot0:thumb_dist_actuator" cutoff="1.5"></actuatorfrc>
+        <actuatorfrc name="robot0:finger1_roll_trq_sensor" actuator="robot0:finger1_roll_actuator" cutoff="0.7"></actuatorfrc>
+        <actuatorfrc name="robot0:finger1_prox_trq_sensor" actuator="robot0:finger1_prox_actuator" cutoff="1.5"></actuatorfrc>
+        <actuatorfrc name="robot0:finger1_dist_trq_sensor" actuator="robot0:finger1_dist_actuator" cutoff="1.5"></actuatorfrc>
+        <actuatorfrc name="robot0:finger2_roll_trq_sensor" actuator="robot0:finger2_roll_actuator" cutoff="0.7"></actuatorfrc>
+        <actuatorfrc name="robot0:finger2_prox_trq_sensor" actuator="robot0:finger2_prox_actuator" cutoff="1.5"></actuatorfrc>
+        <actuatorfrc name="robot0:finger2_dist_trq_sensor" actuator="robot0:finger2_dist_actuator" cutoff="1.5"></actuatorfrc>
+
+    </sensor>
+
+</mujoco>
